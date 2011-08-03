@@ -40,8 +40,12 @@ begin
     if bt = Symbolicator.symbolicated_backtrace(e)
       puts "Backtrace:"
       bt.each do |l|
-        # symbolicated lines start with [
-        puts l.send(l[/^\[/] ? :red : :green)
+        if STDOUT.tty?
+          # symbolicated lines start with [
+          puts l.send(l[/^\[/] ? :red : :green)
+        else
+          puts l
+        end
       end
     else
       puts "\tNo dSYM found"

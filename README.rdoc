@@ -2,9 +2,22 @@
 
 lib and cli tool to download airbrake iOS crash reports via the api and symbolicate them
 
-Works best if GCGitCommitHash is set in the iOS apps Info.plist. (a la https://github.com/brettg/xcode-git-cfbundleversion). Failing that it _should_ try using CFBundleVersion (and CFBundleShortVersion).
+The idea is:
+* Find all the XCode Archive files via spotlight
+* Pull the GCGitCommitHash (or failing that CFBundleVersion) out of the Info.plist for each binary and map that to a dSYM file
+* Given an ActiveResource Error object from the Airbrake API match it up to a dSYM file and try to symbolicate the stack trace
+
+
+So far, I've only tried it out so far on ruby 1.9.2
 
 == Basic Usage
 
-TODO
-
+Install the gem:
+  gem install airbrake_symbolicate
+  
+Run the cli:
+  airbrake_symbolicate airbrake_account_name airbrake_api_auth_token
+Where the account name is your subdomain on airbrake (as in http://airbrake_account_name.airbrakeapp.com) and the API key is the one available on the Airbrake account admin's user page (NOT the reporting API key for the project).
+This should spit out all the errors available via the API and the symbolicated backtrace if an appropriate dSYM is found. There's not much error handling.
+  
+See bin/airbrake_symbolicate for general usage from ruby.
