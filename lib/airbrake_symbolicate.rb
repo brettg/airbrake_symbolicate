@@ -1,13 +1,13 @@
 require 'active_resource'
 module AirbrakeSymbolicate
   class DsymFinder
-    @@dyms = nil
+    @@dsyms = nil
     
     class << self
-      def dsym_for_commit(commit_hash)
-        find_dsyms  unless @@dyms
+      def dsym_for_error(error)
+        find_dsyms  unless @@dsyms
         
-        @@dyms[commit_hash]
+        @@dsyms[error.environment.git_commit] || @@dsyms[error.environment.app_version]
       end
       
       private 
@@ -15,19 +15,28 @@ module AirbrakeSymbolicate
       # use spotlight to find all the xcode archives
       # then use the Info.plist inside those archives to try and look up a git commit hash
       def find_dsyms
-        @@dyms = {}
+        @@dsyms = {}
         
         files = `mdfind 'kMDItemKind = "Xcode Archive"'`.split("\n")
         files.each do |f|
           # puts `ls '#{f.chomp}'`
           info = `find '#{f}/Products' -name Info.plist`.chomp
-          hash = `/usr/libexec/PlistBuddy -c 'Print :GCGitCommitHash' '#{info}' 2>/dev/null`.chomp
-          if hash
+          
+          if commit = plist_val(info, 'GCGitCommitHash')
             if bin_file = Dir[File.join(f, '/dSYMs/*.dSYM/**/DWARF/*')].first
-              @@dyms[hash] = bin_file
+              @@dsyms[commit] = bin_file
             end
+          else
+            short_version = plist_val(info, 'CFBundleShortVersionString')
+            long_version = plist_val(info, 'CFBundleVersion')
+            # this is the format in HTApplicationVersion() in hoptoad-ios 
+            @@dsyms["#{CFBundleShortVersionString} (#{CFBundleVersion})"] = bin_file
           end
         end
+      end
+      
+      def plist_val(plist, key)
+        `/usr/libexec/PlistBuddy -c 'Print :#{key}' '#{plist}' 2>/dev/null`.chomp
       end
     end
   end
@@ -35,7 +44,7 @@ module AirbrakeSymbolicate
   class Symbolicator
     class << self
       def symbolicated_backtrace(error)
-        if dsym = DsymFinder.dsym_for_commit(error.environment.git_commit)
+        if dsym = DsymFinder.dsym_for_error(error)
           error.backtrace.line.map {|l| Symbolicator.symbolicate_line(dsym, l)}
         end
       end

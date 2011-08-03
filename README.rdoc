@@ -2,7 +2,7 @@
 
 lib and cli tool to download airbrake iOS crash reports via the api and symbolicate them
 
-Current depends on GCGitCommitHash being correctly set in the iOS apps Info.plist. (a la https://github.com/brettg/xcode-git-cfbundleversion) I might change that to use CFBundleVersion.
+Works best if GCGitCommitHash is set in the iOS apps Info.plist. (a la https://github.com/brettg/xcode-git-cfbundleversion). Failing that it _should_ try using CFBundleVersion (and CFBundleShortVersion).
 
 == Basic Usage
 

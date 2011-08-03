@@ -27,7 +27,7 @@ page = 1
 begin
   errors = Error.find(:all, :params => {:page => page})
   errors.each do |e|
-    e = Error.find(e.id)
+    e.reload
     
     puts DIVIDER
     puts META_FORMAT % ['message', e.error_message]
