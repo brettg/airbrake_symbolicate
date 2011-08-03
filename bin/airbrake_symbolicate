@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+
+
+if File.exists?(File.join(File.expand_path('../..', __FILE__), '.git'))
+  $:.unshift(File.expand_path('../../lib', __FILE__))
+end
+require "airbrake_symbolicate"
+
+include AirbrakeSymbolicate
+
+Hoptoad.account = ENV['HOPTOAD_ACCOUNT'] || ARGV[0]
+Hoptoad.auth_token = ENV['HOPTOAD_AUTH_TOKEN'] || ARGV[1]
+
+unless Hoptoad.site && Hoptoad.auth_token
+  puts "\tUsage: airbrake_symbolicate hoptoad_account hoptoad_auth_token"
+  puts "\tOr set HOPTOAD_ACCOUNT and HOPTOAD_AUTH_TOKEN environment variables."
+  puts
+  puts "\tHoptoad account and auth token must be specfied!"
+  puts "\texiting..."
+  exit
+end
+
+DIVIDER = "*" * 40
+META_FORMAT = "%20s: %s"
+
+page = 1
+begin
+  errors = Error.find(:all, :params => {:page => page})
+  errors.each do |e|
+    e = Error.find(e.id)
+    
+    puts DIVIDER
+    puts META_FORMAT % ['message', e.error_message]
+    puts META_FORMAT % ['notices count', e.notices_count]
+    puts META_FORMAT % ['operating system', e.environment.operating_system]
+    puts META_FORMAT % ['app version', e.environment.app_version]
+    puts META_FORMAT % ['url', Error.site + Error.element_path(e.id).sub(/\.xml$/, '')]
+    
+    if bt = Symbolicator.symbolicated_backtrace(e)
+      puts "Backtrace:"
+      puts bt.join("\n")
+    else
+      puts "\tNo dSYM found"
+    end
+    puts DIVIDER
+    puts
+    puts
+  end
+  page += 1
+end until errors.empty?

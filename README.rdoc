@@ -1,0 +1,10 @@
+= airbrake_symbolicate
+
+lib and cli tool to download airbrake iOS crash reports via the api and symbolicate them
+
+Current depends on GCGitCommitHash being correctly set in the iOS apps Info.plist. (a la https://github.com/brettg/xcode-git-cfbundleversion) I might change that to use CFBundleVersion.
+
+== Basic Usage
+
+TODO
+
