@@ -9,14 +9,14 @@ require "airbrake_symbolicate"
 
 include AirbrakeSymbolicate
 
-Hoptoad.account = ENV['HOPTOAD_ACCOUNT'] || ARGV[0]
-Hoptoad.auth_token = ENV['HOPTOAD_AUTH_TOKEN'] || ARGV[1]
+Airbrake.account = ENV['AIRBRAKE_ACCOUNT'] || ARGV[0]
+Airbrake.auth_token = ENV['AIRBRAKE_AUTH_TOKEN'] || ARGV[1]
 
-unless Hoptoad.site && Hoptoad.auth_token
-  puts "\tUsage: airbrake_symbolicate hoptoad_account hoptoad_auth_token"
-  puts "\tOr set HOPTOAD_ACCOUNT and HOPTOAD_AUTH_TOKEN environment variables."
+unless Airbrake.site && Airbrake.auth_token
+  puts "\tUsage: airbrake_symbolicate airbrake_account airbrake_auth_token"
+  puts "\tOr set AIRBRAKE_ACCOUNT and AIRBRAKE_AUTH_TOKEN environment variables."
   puts
-  puts "\tHoptoad account and auth token must be specfied!"
+  puts "\tAirbrake account and auth token must be specfied!"
   puts "\texiting..."
   exit
 end

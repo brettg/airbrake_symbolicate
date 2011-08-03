@@ -60,7 +60,7 @@ module AirbrakeSymbolicate
     end
   end
   
-  class Hoptoad < ActiveResource::Base
+  class Airbrake < ActiveResource::Base
     cattr_accessor :auth_token
 
     class << self
@@ -74,7 +74,7 @@ module AirbrakeSymbolicate
       end
 
       def append_auth_token_to_params(*arguments)
-        raise RuntimeError.new("Hoptoad.auth_token must be set!") if !auth_token
+        raise RuntimeError.new("Airbrake.auth_token must be set!") if !auth_token
         
         opts = arguments.last.is_a?(Hash) ? arguments.pop : {}
         opts = opts.has_key?(:params) ? opts : opts.merge(:params => {})
@@ -86,7 +86,7 @@ module AirbrakeSymbolicate
     
   end
   
-  class Error < Hoptoad  
+  class Error < Airbrake  
   end
   
 end
