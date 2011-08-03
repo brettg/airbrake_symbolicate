@@ -12,8 +12,12 @@ Gem::Specification.new do |s|
   s.description = 'lib and cli tool to download airbrake iOS crash reports via the api and ' +
                   'symbolicate them'
   s.licenses = 'MIT'
+  
+  s.executables = 'airbrake_symbolicate'
 
-  s.add_dependency('activeresource', '>= 0')
+  s.add_dependency('activeresource', '>= 3.0')
+  s.add_dependency('colored', '>= 1.2')
+  
   s.add_development_dependency('bundler', '>= 0')
 
   s.files += Dir['lib/**/*.rb'] + Dir['bin/*'] + %w(LICENSE.txt README.rdoc Rakefile)

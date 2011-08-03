@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'colored'
 
 if File.exists?(File.join(File.expand_path('../..', __FILE__), '.git'))
   $:.unshift(File.expand_path('../../lib', __FILE__))
@@ -38,13 +39,13 @@ begin
     
     if bt = Symbolicator.symbolicated_backtrace(e)
       puts "Backtrace:"
-      puts bt.join("\n")
+      bt.each do |l|
+        # symbolicated lines start with [
+        puts l.send(l[/^\[/] ? :red : :green)
+      end
     else
       puts "\tNo dSYM found"
     end
-    puts DIVIDER
-    puts
-    puts
   end
   page += 1
 end until errors.empty?
