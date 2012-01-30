@@ -7,7 +7,7 @@ module AirbrakeSymbolicate
       def dsym_for_error(error)
         find_dsyms  unless @@dsyms
         
-        @@dsyms[error.environment.git_commit] || @@dsyms[error.environment.app_version]
+        @@dsyms[error.environment.git_commit] || @@dsyms[error.environment.application_version]
       end
       
       private 
