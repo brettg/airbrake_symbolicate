@@ -65,7 +65,8 @@ module AirbrakeSymbolicate
 
     class << self
       def account=(a)
-        self.site = "http://#{a}.airbrakeapp.com/" if a
+        self.site = "https://#{a}.airbrake.io/" if a
+        self.format = ActiveResource::Formats::XmlFormat
       end
       
       def find(*arguments)
