@@ -7,7 +7,7 @@ module AirbrakeSymbolicate
       def dsym_for_error(error)
         find_dsyms  unless @@dsyms
         
-        @@dsyms[error.environment.git_commit] || @@dsyms[error.environment.application_version]
+        @@dsyms[error.environment.application_version]
       end
       
       private 
@@ -21,17 +21,26 @@ module AirbrakeSymbolicate
         files.each do |f|
           # puts `ls '#{f.chomp}'`
           info = `find '#{f}/Products' -name Info.plist`.chomp
-          
-          if commit = plist_val(info, 'GCGitCommitHash')
-            if bin_file = Dir[File.join(f, '/dSYMs/*.dSYM/**/DWARF/*')].first
-              @@dsyms[commit] = bin_file
-            end
-          else
-            short_version = plist_val(info, 'CFBundleShortVersionString')
-            long_version = plist_val(info, 'CFBundleVersion')
-            # this is the format in HTApplicationVersion() in hoptoad-ios 
-            @@dsyms["#{CFBundleShortVersionString} (#{CFBundleVersion})"] = bin_file
+
+          # this is the version reported as application-version by Airbrake
+          version = plist_val(info, 'CFBundleVersion')
+          if bin_file = Dir[File.join(f, '/dSYMs/*.dSYM/**/DWARF/*')].first
+            @@dsyms[version] = bin_file
           end
+          
+          # I don't see the git-commit value in the values Airbrake
+          # returns for my errors. Maybe these are only added with github
+          # integration?
+          #if commit = plist_val(info, 'GCGitCommitHash')
+              #@@dsyms[commit] = bin_file
+            #end
+          #else
+          # The responses I get from Airbrake just have the CFBundleVersion value,
+          # not sure if there are some conditions where both versions below are returned.
+            #short_version = plist_val(info, 'CFBundleShortVersionString')
+            #long_version = plist_val(info, 'CFBundleVersion')
+            #@@dsyms["#{CFBundleShortVersionString} (#{CFBundleVersion})"] = bin_file
+          #end
         end
       end
       
