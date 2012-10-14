@@ -14,10 +14,10 @@ So far, I've only tried it out so far on ruby 1.9.2
 
 Install the gem:
   gem install airbrake_symbolicate
-  
+
 Run the cli:
   airbrake_symbolicate airbrake_account_name airbrake_api_auth_token
-Where the account name is your subdomain on airbrake (as in http://airbrake_account_name.airbrakeapp.com) and the API key is the one available on the Airbrake account admin's user page (NOT the reporting API key for the project).
+Where the account name is your subdomain on airbrake (as in http://airbrake_account_name.airbrake.io) and the API key is the one available on the Airbrake account admin's user page (NOT the reporting API key for the project).
 This should spit out all the errors available via the API and the symbolicated backtrace if an appropriate dSYM is found. There's not much error handling.
-  
+
 See bin/airbrake_symbolicate for general usage from ruby.

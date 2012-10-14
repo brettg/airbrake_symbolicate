@@ -29,14 +29,14 @@ begin
   errors = Error.find(:all, :params => {:page => page})
   errors.each do |e|
     e.reload
-    
+
     puts DIVIDER
     puts META_FORMAT % ['message', e.error_message]
     puts META_FORMAT % ['notices count', e.notices_count]
-    puts META_FORMAT % ['operating system', e.environment.operating_system]
+    puts META_FORMAT % ['operating system', e.environment.operating_system] rescue nil
     puts META_FORMAT % ['url', Error.site + Error.element_path(e.id).sub(/\.xml$/, '')]
-    puts META_FORMAT % ['app version', e.environment.application_version]
-    
+    puts META_FORMAT % ['app version', e.app_version]
+
     if bt = Symbolicator.symbolicated_backtrace(e)
       puts "Backtrace:"
       bt.each do |l|
