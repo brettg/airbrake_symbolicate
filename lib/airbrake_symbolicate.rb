@@ -29,8 +29,6 @@ module AirbrakeSymbolicate
             long_version
           end
 
-          puts version
-
           if bin_file = Dir[File.join(f, '/dSYMs/*.dSYM/**/DWARF/*')].first
             @@dsyms[version] = bin_file
           end
