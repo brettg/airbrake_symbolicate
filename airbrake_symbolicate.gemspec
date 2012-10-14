@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = 'airbrake_symbolicate'
-  s.version     = '0.1'
+  s.version     = '0.2'
   s.date = Time.now.strftime('%Y-%m-%d')
   s.authors     = ['Brett Gibson']
   s.email       = ['brettdgibson@gmail.com']
