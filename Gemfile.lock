@@ -1,24 +1,36 @@
 PATH
   remote: .
   specs:
-    airbrake_symbolicate (0.1)
+    airbrake_symbolicate (0.2.1)
       activeresource (>= 3.0)
       colored (>= 1.2)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (3.0.9)
-      activesupport (= 3.0.9)
-      builder (~> 2.1.2)
-      i18n (~> 0.5.0)
-    activeresource (3.0.9)
-      activemodel (= 3.0.9)
-      activesupport (= 3.0.9)
-    activesupport (3.0.9)
-    builder (2.1.2)
+    activemodel (7.0.3)
+      activesupport (= 7.0.3)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
+    activeresource (6.0.0)
+      activemodel (>= 6.0)
+      activemodel-serializers-xml (~> 1.0)
+      activesupport (>= 6.0)
+    activesupport (7.0.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+    builder (3.2.4)
     colored (1.2)
-    i18n (0.5.0)
+    concurrent-ruby (1.1.10)
+    i18n (1.10.0)
+      concurrent-ruby (~> 1.0)
+    minitest (5.16.0)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
 
 PLATFORMS
   ruby
